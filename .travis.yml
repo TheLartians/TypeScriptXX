@@ -45,5 +45,5 @@ before_install:
 
 script:
   - ./build/TypeScriptPP -d
-  - ./build/TypeScriptPP -s lua/main.lua
+  - ./build/TypeScriptPP -s lua
  
