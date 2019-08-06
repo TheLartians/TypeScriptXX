@@ -17,7 +17,7 @@ class Greeter {
   }
 
   public greet() {
-    lib.log(`Hello ${this.name}!`);
+    lib.log(`Hello ${this.name} from TypeScript!`);
   }
 }
 
