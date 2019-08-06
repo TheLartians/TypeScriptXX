@@ -73,7 +73,7 @@ int main(int argc, char ** argv) {
     glue::LuaState lua;
     lua.openStandardLibs();
     lua["lib"] = lib;
-    lua["LUA_PATH"] = path + "?.lua;?/index.lua";
+    lua["package"]["path"] = path + "/?.lua;" + path + "/?/index.lua;";
     lua.runFile(path + "/main.lua");
   }
   
