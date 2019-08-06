@@ -2,7 +2,9 @@
 
 # TypeScriptPP
 
-Example project using [Glue](https://github.com/TheLartians/Glue) and [TypeScriptToLua](https://github.com/TypeScriptToLua/TypeScriptToLua) to embed [TypeScript](https://www.typescriptlang.org) in a C++ project.
+Example project showing to embed the [TypeScript](https://www.typescriptlang.org) scripting language in a C++ project.
+[TypeScriptToLua](https://github.com/TypeScriptToLua/TypeScriptToLua) is used to transpile TypeScript code to Lua that is embedded via [Glue](https://github.com/TheLartians/Glue).
+Declarations for the C++ interface can be generated automatically from Glue elements.
 
 ## Usage
 
