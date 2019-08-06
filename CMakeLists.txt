@@ -29,3 +29,11 @@ target_link_libraries(TypeScriptPP Glue cxxopts)
 
 GlueCreateTypescriptTarget(CompileTypescript ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/lua)
 add_dependencies(TypeScriptPP CompileTypescript)
+
+add_custom_target(UpdateDeclarations
+  COMMAND TypeScriptPP -d > ${CMAKE_CURRENT_SOURCE_DIR}/typescript/lib.d.ts
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+  COMMENT "update typescript declarations"
+)
+
+add_dependencies(UpdateDeclarations TypeScriptPP)

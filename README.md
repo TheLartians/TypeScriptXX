@@ -18,8 +18,14 @@ cmake --build build # compiles C++ and TypeScript sources
 ./build/TypeScriptPP -s lua # run transpiled lua script
 ```
 
-## Recompiling TypeScript without CMake
+## Recompile TypeScript without CMake
 
 ```bash
 npm run build
+```
+
+## Update declarations
+
+```
+cmake --build build --target UpdateDeclarations
 ```

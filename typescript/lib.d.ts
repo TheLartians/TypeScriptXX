@@ -14,3 +14,4 @@ declare module lib {
   }
   function log(this: void, arg0: string): void;
 }
+
