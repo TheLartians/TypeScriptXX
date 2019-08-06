@@ -21,9 +21,7 @@ namespace lib {
 }
 
 // allow implicit casting of B to base class A in lars::Any values
-template <> struct lars::AnyVisitable<lib::B> {
-  using type = lars::DataVisitableWithBases<lib::B, lib::A>;
-};
+LARS_ANY_DECLARE_BASES(lib::B, lib::A);
 
 int main(int argc, char ** argv) {
 
