@@ -2,7 +2,7 @@
 
 # TypeScriptPP
 
-Example project on embedding typescript in C++ applications.
+Example project on using [Glue](https://github.com/TheLartians/Glue) and [TypeScriptToLua](https://github.com/TypeScriptToLua/TypeScriptToLua) to embed [TypeScript](https://www.typescriptlang.org) in a C++ project.
 
 ## Usage
 
