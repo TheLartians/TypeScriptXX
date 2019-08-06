@@ -5,6 +5,6 @@
   },
   "dependencies": {},
   "scripts": {
-    "build": "tstl --outDir lua"
+    "build": "tstl"
   }
 }

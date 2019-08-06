@@ -2,14 +2,15 @@ cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 
 project(TypeScriptPP)
 
-add_executable(TypeScriptPP lib/main.cpp)
+add_executable(TypeScriptPP source/main.cpp)
 set_target_properties(TypeScriptPP PROPERTIES CXX_STANDARD 17 COMPILE_FLAGS "-Wall -pedantic -Wextra -Werror")
 
 include(cmake/CPM.cmake)
 
 CPMAddPackage(
   NAME Glue
-  VERSION 0.9.1
+  VERSION 0.9.2
+  GIT_TAG 9a2a5597d43a8eaf9d5111cd8b0781b105c1ceff
   GIT_REPOSITORY https://github.com/TheLartians/Glue.git
   OPTIONS
     "GLUE_ENABLE_LUA YES"
@@ -27,5 +28,5 @@ CPMAddPackage(
 
 target_link_libraries(TypeScriptPP Glue cxxopts)
 
-GlueCreateTypescriptTarget(CompileTypescript ${CMAKE_CURRENT_SOURCE_DIR})
+GlueCreateTypescriptTarget(CompileTypescript ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/lua)
 add_dependencies(TypeScriptPP CompileTypescript)

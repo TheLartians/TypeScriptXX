@@ -5,13 +5,13 @@
     "target":"es6", 
     "types": ["lua-types/5.3"],
     "strict" : true,
-    "outDir": "lib",
-    "rootDir":"src",   
-    "baseUrl": "src",  
+    "outDir": "lua",
+    "rootDir":"typescript",   
+    "baseUrl": "typescript",  
     "module": "commonjs"
   },
   
-  "include": ["src"],
+  "include": ["typescript"],
   "exclude": ["node_modules"],
 
   "tstl": {
