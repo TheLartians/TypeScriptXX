@@ -1,8 +1,8 @@
 
 function test() {
   // test bindings
-  const a = lib.A.create(46);
-  const b = lib.B.create(-5);
+  const a = new lib.A(46);
+  const b = new lib.B(-5);
   b.setName("B");
   console.assert(a.add(b).next().data() == 42);
   console.assert(b.name() == "B");

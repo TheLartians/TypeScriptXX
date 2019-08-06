@@ -49,7 +49,7 @@ int main(int argc, char ** argv) {
   };
 
   lib["A"] = glue::ClassElement<lib::A>()
-  .addConstructor<int>("create")
+  .addConstructor<int>()
   .addMember("data", &lib::A::data)
   .addMethod("add", &lib::A::add)
   .addFunction("next", [](const lib::A &a){ return lib::A(a.data+1); })
@@ -57,7 +57,7 @@ int main(int argc, char ** argv) {
   ;
 
   lib["B"] = glue::ClassElement<lib::B>()
-  .addConstructor<int>("create")
+  .addConstructor<int>()
   .addMember("name", &lib::B::name)
   .setExtends(lib["A"])
   ;
