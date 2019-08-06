@@ -27,5 +27,5 @@ npm run build
 ## Update declarations
 
 ```
-cmake --build build --target UpdateDeclarations
+cmake --build build --target update-declarations
 ```
