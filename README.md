@@ -10,7 +10,7 @@ Example project using [Glue](https://github.com/TheLartians/Glue) and [TypeScrip
 git clone https://github.com/TheLartians/TypeScriptPP.git
 cd TypeScriptPP
 cmake -H. -Bbuild
-cmake --build build
+cmake --build build # compiles C++ and TypeScript sources 
 ./build/TypeScriptPP -d # print TypeScript declarations
 ./build/TypeScriptPP -s lua/main.lua # run transpiled lua script
 ```
