@@ -16,6 +16,6 @@
 
   "tstl": {
     "luaTarget": "5.3",
-    "luaLibImport": "inline"
+    "luaLibImport": "require"
   }
 }
