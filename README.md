@@ -15,7 +15,7 @@ cd TypeScriptPP
 cmake -H. -Bbuild
 cmake --build build # compiles C++ and TypeScript sources 
 ./build/TypeScriptPP -d # print TypeScript declarations
-./build/TypeScriptPP -s lua/main.lua # run transpiled lua script
+./build/TypeScriptPP -s lua # run transpiled lua script
 ```
 
 ## Recompiling TypeScript without CMake
