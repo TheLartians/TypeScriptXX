@@ -10,7 +10,6 @@ include(cmake/CPM.cmake)
 CPMAddPackage(
   NAME Glue
   VERSION 0.9.3
-  GIT_TAG 3acce9d0af279bbf8c810a1a5aebed440b4505a1
   GIT_REPOSITORY https://github.com/TheLartians/Glue.git
   OPTIONS
     "GLUE_ENABLE_LUA YES"
