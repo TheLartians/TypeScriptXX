@@ -31,7 +31,7 @@ int main(int argc, char ** argv) {
   options.add_options()
     ("h,help", "Show help")
     ("d,declarations", "Print typescript declarations")
-    ("s,script", "path to directory containing the main.lua script", cxxopts::value<std::string>());
+    ("s,script", "path to the main directory containing an index.lua script", cxxopts::value<std::string>());
 
   auto opts = options.parse(argc, argv);
 
@@ -74,7 +74,7 @@ int main(int argc, char ** argv) {
     lua.openStandardLibs();
     lua["lib"] = lib;
     lua["package"]["path"] = path + "/?.lua;" + path + "/?/index.lua;";
-    lua.runFile(path + "/main.lua");
+    lua.runFile(path + "/index.lua");
   }
   
   return 0;
