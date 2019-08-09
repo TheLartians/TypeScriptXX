@@ -5,6 +5,8 @@ project(TypeScriptPP)
 add_executable(TypeScriptPP source/main.cpp)
 set_target_properties(TypeScriptPP PROPERTIES CXX_STANDARD 17 COMPILE_FLAGS "-Wall -pedantic -Wextra -Werror")
 
+# ---- Add dependencies ----
+
 include(cmake/CPM.cmake)
 
 CPMAddPackage(
@@ -27,13 +29,18 @@ CPMAddPackage(
 
 target_link_libraries(TypeScriptPP Glue cxxopts)
 
-GlueCreateTypescriptTarget(CompileTypescript ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/lua)
-add_dependencies(TypeScriptPP CompileTypescript)
+# ---- Create typescript declarations ----
 
-add_custom_target(update-declarations
+add_custom_command(
+  OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/typescript/lib.d.ts
+  DEPENDS TypeScriptPP
   COMMAND TypeScriptPP -d > ${CMAKE_CURRENT_SOURCE_DIR}/typescript/lib.d.ts
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
   COMMENT "update typescript declarations"
 )
+ADD_CUSTOM_TARGET(update-declarations DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/typescript/lib.d.ts)
 
-add_dependencies(update-declarations TypeScriptPP)
+# ---- Compile typescript code ----
+
+GlueCreateTypescriptTarget(compile-typescript ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/lua)
+add_dependencies(compile-typescript update-declarations)
