@@ -18,7 +18,7 @@ This project demonstrates how to use CMake to bring TypeScript, Lua and C++ toge
 git clone https://github.com/TheLartians/TypeScriptPP.git
 cd TypeScriptPP
 cmake -H. -Bbuild
-cmake --build build -j4 # compiles C++, updates lib.d.ts and transpiles TypeScript
+cmake --build build -j4 # compiles C++, updates declarations and transpiles TypeScript
 ./build/TypeScriptPP -d # print TypeScript declarations
 ./build/TypeScriptPP -s lua # runs the transpiled lua script lua/index.lua 
 ```
