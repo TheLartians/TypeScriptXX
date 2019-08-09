@@ -1,8 +1,8 @@
 
 function test() {
   // test bindings
-  const a = new lib.A(46);
-  const b = new lib.B(-5);
+  const a = new cpplib.A(46);
+  const b = new cpplib.B(-5);
   b.setName("B");
   console.assert(a.add(b).next().data() == 42);
   console.assert(b.name() == "B");
@@ -22,7 +22,7 @@ class Greeter {
   }
 
   public greet() {
-    lib.log(`Hello ${this.name} from TypeScript!`);
+    cpplib.log(`Hello ${this.name} from TypeScript!`);
   }
 }
 

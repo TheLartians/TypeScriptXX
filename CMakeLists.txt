@@ -33,13 +33,13 @@ target_link_libraries(TypeScriptPP Glue cxxopts)
 # ---- Create typescript declarations ----
 
 add_custom_command(
-  OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/typescript/lib.d.ts
+  OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/typescript/cpplib.d.ts
   DEPENDS TypeScriptPP
-  COMMAND TypeScriptPP -d > ${CMAKE_CURRENT_SOURCE_DIR}/typescript/lib.d.ts
+  COMMAND TypeScriptPP -d > ${CMAKE_CURRENT_SOURCE_DIR}/typescript/cpplib.d.ts
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
   COMMENT "update typescript declarations"
 )
-ADD_CUSTOM_TARGET(update-declarations DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/typescript/lib.d.ts)
+ADD_CUSTOM_TARGET(update-declarations DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/typescript/cpplib.d.ts)
 
 # ---- Compile typescript code ----
 

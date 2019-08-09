@@ -63,7 +63,7 @@ int main(int argc, char ** argv) {
   ;
 
   if (opts["declarations"].as<bool>()) {
-    std::cout << glue::getTypescriptDeclarations("lib", lib) << std::endl;
+    std::cout << glue::getTypescriptDeclarations("cpplib", lib) << std::endl;
   }
 
   // run lua
@@ -72,7 +72,7 @@ int main(int argc, char ** argv) {
     auto path = opts["script"].as<std::string>();
     glue::LuaState lua;
     lua.openStandardLibs();
-    lua["lib"] = lib;
+    lua["cpplib"] = lib;
     lua["package"]["path"] = path + "/?.lua;" + path + "/?/index.lua;";
     lua.runFile(path + "/index.lua");
   }
