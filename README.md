@@ -20,7 +20,7 @@ cd TypeScriptPP
 cmake -H. -Bbuild
 cmake --build build -j4 # compiles C++, updates lib.d.ts and transpiles TypeScript
 ./build/TypeScriptPP -d # print TypeScript declarations
-./build/TypeScriptPP -s lua # runs the transpiled lua script lua/main.lua 
+./build/TypeScriptPP -s lua # runs the transpiled lua script lua/index.lua 
 ```
 
 ## How it works
