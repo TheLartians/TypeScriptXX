@@ -7,7 +7,7 @@ Example project showing how to embed the [TypeScript](https://www.typescriptlang
 ## Motivation
 
 Lua is a great embedded scripting language for C++ projects. 
-Unfortunately, Lua code becomes unmaintainable the project grows, due to the absence of reliable static type checkers. 
+Unfortunately, Lua code becomes unmaintainable as the project grows, due to the absence of reliable static type checkers. 
 In the JavaScript world this was solved a long time ago with through the [TypeScript](https://www.typescriptlang.org) language.
 Thanks to the great work of [TypeScriptToLua](https://typescripttolua.github.io) project, it is now possible to use TypeScript for Lua projects.
 This project demonstrates how to use CMake to bring TypeScript, Lua and C++ together and can be used as inspiration or a starting point for further projects.
