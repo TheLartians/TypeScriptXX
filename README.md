@@ -28,10 +28,10 @@ cmake --build build -j4 # compiles C++, updates lib.d.ts and transpiles TypeScri
 The C++ project is contained in [source/main.cpp](source/main.cpp) which contains the C++ library and a Lua interface.
 It also defines a simple CLI for generating and printing the declarations and executing a lua script.
 
-CMake uses [CPM](https://github.com/TheLartians/CPM) and [npm](https://www.npmjs.com) to download and configure all dependencies in the current directory.
+The CMake script uses [CPM](https://github.com/TheLartians/CPM) and [npm](https://www.npmjs.com) to download and configure all dependencies in the current directory.
 After building the C++ code, CMake uses the executable to update the TypeScript [declarations](typescript/cpplib.d.ts) and then transpiles the TypeScript code to Lua with TypeScriptToLua. 
 
-CMake also adds `package.json` and the TypeScript sources to the dependency to automatically re-invoke TypeScriptToLua on changes.
+The script also adds `package.json` and the TypeScript sources to the dependency to automatically re-invoke TypeScriptToLua on changes.
 The TypeScript sources are collected using `GLOB`, so be sure to re-run `cmake` after adding new source files.
 
 ## Additional commands
