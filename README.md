@@ -2,7 +2,7 @@
 
 # TypeScriptPP
 
-Example project showing how to ebed the [TypeScript](https://www.typescriptlang.org) scripting language in a C++ project with automatically generated declarations.
+Example project showing how to embed the [TypeScript](https://www.typescriptlang.org) scripting language in a C++ project with automatically generated declarations.
 
 ## Motivation
 
@@ -28,7 +28,7 @@ The C++ project is contained in [source/main.cpp](source/main.cpp) which contain
 It also defines a simple CLI for generating and printing the declarations and executing a lua script.
 
 CMake uses [CPM](https://github.com/TheLartians/CPM) and [npm](https://www.npmjs.com) to download and configure all dependencies in the current directory.
-After building the C++ code, CMake uses the executable to update the lua declarations and then transpiles the TypeScript code to Lua with TypeScriptToLua. 
+After building the C++ code, CMake uses the executable to update the Lua declarations and then transpiles the TypeScript code to Lua with TypeScriptToLua. 
 
 CMake also adds `package.json` and the TypeScript sources to the dependency to automatically re-invoke TypeScriptToLua on changes.
 The TypeScript sources are collected using `GLOB`, so be sure to re-run `cmake` after adding new source files.
