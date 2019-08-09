@@ -26,6 +26,6 @@ npm run build
 
 ## Only update declarations
 
-```
+```bash
 cmake --build build --target update-declarations
 ```
