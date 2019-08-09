@@ -1,5 +1,4 @@
 /lua
-/typescript/lib.d.ts
 /node_modules
 /build*
 .DS_Store
