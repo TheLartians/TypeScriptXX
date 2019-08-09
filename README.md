@@ -13,7 +13,7 @@ Declarations for the C++ interface can be generated automatically from Glue elem
 git clone https://github.com/TheLartians/TypeScriptPP.git
 cd TypeScriptPP
 cmake -H. -Bbuild
-cmake --build build -j4 # compiles C++ and TypeScript sources 
+cmake --build build -j4 # compiles C++, creates declarations and compiles TypeScript sources
 ./build/TypeScriptPP -d # print TypeScript declarations
 ./build/TypeScriptPP -s lua # run transpiled lua script
 ```
@@ -24,7 +24,7 @@ cmake --build build -j4 # compiles C++ and TypeScript sources
 npm run build
 ```
 
-## Update declarations
+## Only update declarations
 
 ```
 cmake --build build --target update-declarations
