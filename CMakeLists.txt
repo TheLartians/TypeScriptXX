@@ -24,8 +24,8 @@ CPMAddPackage(
   GITHUB_REPOSITORY jarro2783/cxxopts
   VERSION 2.2.0
   OPTIONS
-    "CXXOPTS_BUILD_EXAMPLES Off"
-    "CXXOPTS_BUILD_TESTS Off"
+    "CXXOPTS_BUILD_EXAMPLES NO"
+    "CXXOPTS_BUILD_TESTS NO"
 )
 
 target_link_libraries(TypeScriptPP Glue cxxopts)
