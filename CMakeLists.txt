@@ -16,7 +16,7 @@ CPMAddPackage(
   GIT_REPOSITORY https://github.com/TheLartians/Glue.git
   OPTIONS
     "GLUE_ENABLE_LUA YES"
-    "GLUE_LUA_LIB lua"
+    "GLUE_BUILD_LUA YES"
 )
 
 CPMAddPackage(
