@@ -46,6 +46,4 @@ before_install:
 script:
   - ./build/TypeScriptPP -d
   - ./build/TypeScriptPP -s lua
-  - cmake --build build --target update-declarations
-  - ./build/TypeScriptPP -s lua
  
