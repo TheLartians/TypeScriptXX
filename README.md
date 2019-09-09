@@ -41,9 +41,3 @@ The TypeScript sources are collected using `GLOB`, so be sure to re-run `cmake` 
 ```bash
 npm run build
 ```
-
-### Manually update the declarations
-
-```bash
-cmake --build build --target update-declarations
-```
