@@ -1,7 +1,7 @@
 declare module cpplib {
   /** @customConstructor cpplib.A.__new */
   class A {
-    constructor(arg0: number)
+    constructor(arg0: number);
     __tostring(): string;
     add(arg1: cpplib.A): cpplib.A;
     data(): number;
@@ -10,7 +10,7 @@ declare module cpplib {
   }
   /** @customConstructor cpplib.B.__new */
   class B extends cpplib.A {
-    constructor(arg0: number)
+    constructor(arg0: number);
     name(): string;
     setName(arg1: string): void;
   }

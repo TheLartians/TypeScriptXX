@@ -12,7 +12,7 @@ include(cmake/CPM.cmake)
 CPMAddPackage(
   NAME Glue
   VERSION 0.9.6-a
-  GIT_TAG 900e254689ffd8f54e6fc5bff4c14ce7cd496613
+  GIT_TAG 14ed1a81659a209aee5cca1d0ab70bd4da3fae25
   GIT_REPOSITORY https://github.com/TheLartians/Glue.git
   OPTIONS
     "GLUE_ENABLE_LUA YES"
@@ -39,9 +39,15 @@ add_custom_command(
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
   COMMENT "update typescript declarations"
 )
-ADD_CUSTOM_TARGET(update-declarations DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/typescript/cpplib.d.ts)
 
 # ---- Compile typescript code ----
 
-GlueCreateTypescriptTarget(compile-typescript ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/lua)
-add_dependencies(compile-typescript update-declarations)
+GlueBuildTypescript(
+  NAME TypeScriptPP
+  DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+  RESULT ${CMAKE_CURRENT_SOURCE_DIR}/lua
+  COMMAND build
+  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/typescript/cpplib.d.ts
+)
+
+add_custom_target(BuildTypeScript ALL DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/lua)
