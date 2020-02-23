@@ -9,6 +9,7 @@
 #include <string>
 #include <thread>
 
+// C++ types that are made available in Lua / TypeScript
 namespace lib {
 
   struct A {
@@ -22,6 +23,7 @@ namespace lib {
     using A::A;
   };
 
+  // Defines the Lua / TypeScript interface for the types
   glue::Element glue() {
     glue::Element element;
 
@@ -65,14 +67,12 @@ int main(int argc, char **argv) {
     return 0;
   }
 
-  // define C++ <-> TypeScript Interface via Glue::Elements
-
   glue::Element glue;
-
   glue["log"] = [](std::string message) { std::cout << "logged: " << message << std::endl; };
-
   glue["lib"] = lib::glue();
 
+  // print the TypeScript declarations. Used by the project's CMakeLists to create the declarations
+  // file.
   if (opts["declarations"].as<bool>()) {
     std::cout << glue::getTypescriptDeclarations("glue", glue) << std::endl;
   }
