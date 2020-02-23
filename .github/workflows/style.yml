@@ -5,22 +5,18 @@ on: [push]
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     
     steps:
     - uses: actions/checkout@v1
 
-    - name: configure
+    - name: Install clang-format
+      run: brew install clang-format
+
+    - name: Configure
       run: |
         cmake -H. -Bbuild
         npm install
-
-    - uses: DoozyX/clang-format-lint-action@v0.5
-      with:
-        source: '.'
-        exclude: './third_party'
-        extensions: 'h,cpp'
-        clangFormatVersion: 9
   
     - name: check ts style
       run: npm run check:style
