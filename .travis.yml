@@ -37,6 +37,8 @@ before_install:
   # Install a supported cmake version (>= 3.14)
   - wget -O cmake.sh https://cmake.org/files/v3.14/cmake-3.14.0-Linux-x86_64.sh 
   - sudo sh cmake.sh --skip-license --exclude-subdir --prefix=/usr/local
+  # update node
+  - npm install n node -g
   # Build and install
   - export PATH=/usr/local/bin:$PATH
   - cmake --version

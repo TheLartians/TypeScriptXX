@@ -2,7 +2,6 @@
 #include <glue/class_element.h>
 #include <glue/declarations.h>
 #include <glue/lua.h>
-#include <unistd.h>
 
 #include <chrono>
 #include <cxxopts.hpp>
