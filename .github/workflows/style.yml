@@ -15,8 +15,12 @@ jobs:
         cmake -H. -Bbuild
         npm install
 
-    - name: check cpp style
-      run: cmake --build build --target check-format
-
+    - uses: DoozyX/clang-format-lint-action@v0.5
+      with:
+        source: '.'
+        exclude: './third_party'
+        extensions: 'h,cpp'
+        clangFormatVersion: 9
+  
     - name: check ts style
       run: npm run check:style
