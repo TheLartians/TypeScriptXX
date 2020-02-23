@@ -27,8 +27,6 @@ namespace lib {
   glue::Element glue() {
     glue::Element element;
 
-    element["log"] = [](std::string message) { std::cout << "logged: " << message << std::endl; };
-
     element["A"] = glue::ClassElement<lib::A>()
                        .addConstructor<int>()
                        .addMember("data", &lib::A::data)

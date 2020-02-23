@@ -32,6 +32,6 @@ class Greeter {
 export function main() {
   test();
   const greeter = new Greeter("C++");
-  glue.lib.log(greeter.greet());
+  glue.log(greeter.greet());
   return 0;
 }
