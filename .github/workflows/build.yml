@@ -12,6 +12,9 @@ jobs:
     
     - name: configure
       run: cmake -H. -Bbuild
+    
+    - name: build
+      run: cmake --build build
 
     - name: run
       run: ./build/TypeScriptPP -s lua
