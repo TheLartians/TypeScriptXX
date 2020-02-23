@@ -2,10 +2,7 @@ cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 
 project(TypeScriptPP)
 
-add_executable(TypeScriptPP source/main.cpp)
-set_target_properties(TypeScriptPP PROPERTIES CXX_STANDARD 17)
-
-# ---- Add dependencies ----
+# ---- Dependencies ----
 
 include(cmake/CPM.cmake)
 
@@ -50,6 +47,10 @@ CPMAddPackage(
   VERSION 1.0
 )
 
+# ---- Create executable ----
+
+add_executable(TypeScriptPP source/main.cpp)
+set_target_properties(TypeScriptPP PROPERTIES CXX_STANDARD 17)
 target_link_libraries(TypeScriptPP Glue cxxopts FileWatcher)
 
 # ---- Create typescript declarations ----
