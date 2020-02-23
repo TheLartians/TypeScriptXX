@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 project(TypeScriptPP)
 
 add_executable(TypeScriptPP source/main.cpp)
-set_target_properties(TypeScriptPP PROPERTIES CXX_STANDARD 17 COMPILE_FLAGS "-Wall -pedantic -Wextra -Werror")
+set_target_properties(TypeScriptPP PROPERTIES CXX_STANDARD 17)
 
 # ---- Add dependencies ----
 
