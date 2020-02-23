@@ -19,8 +19,8 @@ git clone https://github.com/TheLartians/TypeScriptPP.git
 cd TypeScriptPP
 cmake -H. -Bbuild
 cmake --build build -j4 # compiles C++, updates declarations and transpiles TypeScript
-./build/TypeScriptPP -d # print TypeScript declarations
-./build/TypeScriptPP -s lua # runs the transpiled lua script lua/index.lua 
+./build/TypeScriptPP -s lua # runs the transpiled lua script lua/index.lua
+npx concurrently "npm run watch" "./build/TypeScriptPP -s lua --watch" # runs the transpiler and program in watch mode
 ```
 
 ## How it works

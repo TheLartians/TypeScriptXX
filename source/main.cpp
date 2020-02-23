@@ -1,9 +1,13 @@
 #include <glue/class_element.h>
 #include <glue/declarations.h>
 #include <glue/lua.h>
+#include <FileWatcher/FileWatcher.h>
 #include <iostream>
 #include <string>
+#include <thread>
 #include <cxxopts.hpp>
+#include <unistd.h>
+#include <chrono>
 
 namespace lib {
   
@@ -18,6 +22,30 @@ namespace lib {
     using A::A;
   };
 
+  glue::Element glue() {
+    glue::Element element;
+
+    element["log"] = [](std::string message){ 
+      std::cout << "logged: " << message << std::endl;
+    };
+
+    element["A"] = glue::ClassElement<lib::A>()
+      .addConstructor<int>()
+      .addMember("data", &lib::A::data)
+      .addMethod("add", &lib::A::add)
+      .addFunction("next", [](const lib::A &a){ return lib::A(a.data+1); })
+      .addFunction("__tostring", [](const lib::A &a){ return "lib::A(" + std::to_string(a.data) + ")"; })
+    ;
+
+    element["B"] = glue::ClassElement<lib::B>()
+      .addConstructor<int>()
+      .addMember("name", &lib::B::name)
+      .setExtends(element["A"])
+    ;
+
+    return element;
+  }
+
 }
 
 // allow implicit casting of B to base class A in lars::Any values
@@ -31,6 +59,7 @@ int main(int argc, char ** argv) {
   options.add_options()
     ("h,help", "Show help")
     ("d,declarations", "Print typescript declarations")
+    ("w,watch", "Run in watch mode")
     ("s,script", "path to the main directory containing an index.lua script", cxxopts::value<std::string>());
 
   auto opts = options.parse(argc, argv);
@@ -42,39 +71,73 @@ int main(int argc, char ** argv) {
 
   // define C++ <-> TypeScript Interface via Glue::Elements
 
-  glue::Element lib;
+  glue::Element glue;
 
-  lib["log"] = [](std::string message){ 
+  glue["log"] = [](std::string message){ 
     std::cout << "logged: " << message << std::endl;
   };
 
-  lib["A"] = glue::ClassElement<lib::A>()
-  .addConstructor<int>()
-  .addMember("data", &lib::A::data)
-  .addMethod("add", &lib::A::add)
-  .addFunction("next", [](const lib::A &a){ return lib::A(a.data+1); })
-  .addFunction("__tostring", [](const lib::A &a){ return "lib::A(" + std::to_string(a.data) + ")"; })
-  ;
-
-  lib["B"] = glue::ClassElement<lib::B>()
-  .addConstructor<int>()
-  .addMember("name", &lib::B::name)
-  .setExtends(lib["A"])
-  ;
+  glue["lib"] = lib::glue();
 
   if (opts["declarations"].as<bool>()) {
-    std::cout << glue::getTypescriptDeclarations("cpplib", lib) << std::endl;
+    std::cout << glue::getTypescriptDeclarations("glue", glue) << std::endl;
   }
 
   // run lua
-  
+
   if (opts["script"].count() > 0) {
     auto path = opts["script"].as<std::string>();
-    glue::LuaState lua;
-    lua.openStandardLibs();
-    lua["cpplib"] = lib;
-    lua["package"]["path"] = path + "/?.lua;" + path + "/?/index.lua;";
-    lua.runFile(path + "/index.lua");
+
+    auto runMainScript = [&](const std::string &path){
+      glue::LuaState lua;
+      lua.openStandardLibs();
+      lua["glue"] = glue;
+      lua["package"]["path"] = path + "/?.lua;" + path + "/?/index.lua;";
+
+      auto mainMethod = lua.run("return require('.')")
+        .get<glue::Map &>()["main"]
+        .get<lars::AnyFunction>()
+      ;
+
+      lars::AnyArguments args;
+      auto result = mainMethod.call(args);
+      if (result) {
+        return result.get<int>();
+      } else {
+        // implicitly return 0
+        return 0;
+      }
+    };
+
+    if (opts["watch"].count() > 0) {
+
+      struct ChangeListener : public FW::FileWatchListener {
+        bool changed;
+        void handleFileAction(FW::WatchID, const FW::String &, const FW::String &, FW::Action) {
+          changed = true;
+        }
+      } listener;
+      FW::FileWatcher fileWatcher;
+      fileWatcher.addWatch(path, &listener, true);
+      std::cout << "watching " << path << std::endl;
+
+      while(true) {
+        listener.changed = false;
+        fileWatcher.update();
+        if (listener.changed) {
+          try {
+            runMainScript(path);
+          } catch(const std::exception& e) {
+            std::cerr << e.what() << '\n';
+          }
+        }
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+      }
+
+    } else {
+      return runMainScript(path);
+    }
+
   }
   
   return 0;

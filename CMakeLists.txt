@@ -11,8 +11,7 @@ include(cmake/CPM.cmake)
 
 CPMAddPackage(
   NAME Glue
-  VERSION 0.9.6-a
-  GIT_TAG 14ed1a81659a209aee5cca1d0ab70bd4da3fae25
+  VERSION 0.9.6
   GIT_REPOSITORY https://github.com/TheLartians/Glue.git
   OPTIONS
     "GLUE_ENABLE_LUA YES"
@@ -28,7 +27,30 @@ CPMAddPackage(
     "CXXOPTS_BUILD_TESTS NO"
 )
 
-target_link_libraries(TypeScriptPP Glue cxxopts)
+CPMAddPackage(
+  NAME FileWatcher
+  GIT_TAG ee0b97efd206282ef8bb4b9c10c90c941de4a52b
+  GIT_REPOSITORY https://github.com/apetrone/simplefilewatcher.git
+)
+
+if (FileWatcher_ADDED)
+  file (GLOB FileWatcherSources ${FileWatcher_SOURCE_DIR}/source/*.cpp)
+  add_library(FileWatcher ${FileWatcherSources})
+  target_include_directories(FileWatcher PUBLIC ${FileWatcher_SOURCE_DIR}/include)
+  
+  install(
+    TARGETS FileWatcher
+    ARCHIVE DESTINATION lib
+  )
+endif()
+
+CPMAddPackage(
+  NAME Format.cmake
+  GITHUB_REPOSITORY TheLartians/Format.cmake
+  VERSION 1.0
+)
+
+target_link_libraries(TypeScriptPP Glue cxxopts FileWatcher)
 
 # ---- Create typescript declarations ----
 

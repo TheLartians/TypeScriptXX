@@ -1,8 +1,8 @@
 
 function test() {
   // test bindings
-  const a = new cpplib.A(46);
-  const b = new cpplib.B(-5);
+  const a = new glue.lib.A(46);
+  const b = new glue.lib.B(-5);
   b.setName("B");
   console.assert(a.add(b).next().data() == 42);
   console.assert(b.name() == "B");
@@ -10,9 +10,8 @@ function test() {
   const m = new Map<string,number>();
   m.set("a",42);
   console.assert(m.get("a") == 42);
+  print(`all tests passed`)
 }
-
-test();
 
 class Greeter {
   private name: string;
@@ -22,9 +21,13 @@ class Greeter {
   }
 
   public greet() {
-    cpplib.log(`Hello ${this.name} from TypeScript!`);
+    return `Hello ${this.name} from TypeScript!`;
   }
 }
 
-const greeter = new Greeter("C++");
-greeter.greet();
+export function main() {
+  test();
+  const greeter = new Greeter("C++");
+  glue.lib.log(greeter.greet());
+  return 0;
+}

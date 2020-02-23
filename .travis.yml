@@ -41,9 +41,8 @@ before_install:
   - export PATH=/usr/local/bin:$PATH
   - cmake --version
   - cmake -H. -Bbuild
+  - cmake --build build --target check-format
   - cmake --build build
 
 script:
-  - ./build/TypeScriptPP -d
   - ./build/TypeScriptPP -s lua
- 
