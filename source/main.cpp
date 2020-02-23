@@ -65,18 +65,19 @@ int main(int argc, char **argv) {
     return 0;
   }
 
+  // create glue
+
   glue::Element glue;
   glue["log"] = [](std::string message) { std::cout << "logged: " << message << std::endl; };
   glue["lib"] = lib::glue();
 
-  // print the TypeScript declarations. Used by the project's CMakeLists to create the declarations
-  // file.
+  // print the TypeScript declarations on demand.
+  // Used by the project's CMakeLists to create the declarations file.
   if (opts["declarations"].as<bool>()) {
     std::cout << glue::getTypescriptDeclarations("glue", glue) << std::endl;
   }
 
   // run lua
-
   if (opts["script"].count() > 0) {
     auto path = opts["script"].as<std::string>();
 
@@ -100,6 +101,7 @@ int main(int argc, char **argv) {
     };
 
     if (opts["watch"].count() > 0) {
+      std::cout << "Enter watch mode. watching: " << path << std::endl;
       struct ChangeListener : public FW::FileWatchListener {
         bool changed;
         void handleFileAction(FW::WatchID, const FW::String &, const FW::String &, FW::Action) {
@@ -108,8 +110,6 @@ int main(int argc, char **argv) {
       } listener;
       FW::FileWatcher fileWatcher;
       fileWatcher.addWatch(path, &listener, true);
-      std::cout << "watching " << path << std::endl;
-
       while (true) {
         listener.changed = false;
         fileWatcher.update();
@@ -122,7 +122,6 @@ int main(int argc, char **argv) {
         }
         std::this_thread::sleep_for(std::chrono::seconds(1));
       }
-
     } else {
       return runMainScript(path);
     }
