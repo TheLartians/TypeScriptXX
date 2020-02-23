@@ -1,4 +1,6 @@
-[![Build Status](https://travis-ci.com/TheLartians/TypeScriptPP.svg?branch=master)](https://travis-ci.com/TheLartians/TypeScriptPP)
+[![Actions Status](https://github.com/TheLartians/TypeScriptPP/workflows/Build/badge.svg)](https://github.com/TheLartians/TypeScriptPP/actions)
+[![Actions Status](https://github.com/TheLartians/TypeScriptPP/workflows/Check%20style/badge.svg)](https://github.com/TheLartians/TypeScriptPP/actions)
+
 
 # TypeScriptPP
 
