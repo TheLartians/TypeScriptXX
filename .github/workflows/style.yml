@@ -1,0 +1,22 @@
+name: Check style
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: linux-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: configure
+      run: |
+        cmake -H. -Bbuild
+        npm install
+
+    - name: check cpp style
+      run: cmake --build build --target check-style
+
+    - name: check ts style
+      run: npm run check:style
