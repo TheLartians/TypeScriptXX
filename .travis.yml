@@ -41,11 +41,11 @@ before_install:
   - export PATH=/usr/local/bin:$PATH
   - cmake --version
   - cmake -H. -Bbuild
+  # build
+  - cmake --build build
   # check style
   - cmake --build build --target check-format
   - npm run check:style
-  # build
-  - cmake --build build
 
 script:
   - ./build/TypeScriptPP -s lua
