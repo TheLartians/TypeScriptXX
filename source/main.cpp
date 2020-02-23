@@ -1,23 +1,24 @@
+#include <FileWatcher/FileWatcher.h>
 #include <glue/class_element.h>
 #include <glue/declarations.h>
 #include <glue/lua.h>
-#include <FileWatcher/FileWatcher.h>
+#include <unistd.h>
+
+#include <chrono>
+#include <cxxopts.hpp>
 #include <iostream>
 #include <string>
 #include <thread>
-#include <cxxopts.hpp>
-#include <unistd.h>
-#include <chrono>
 
 namespace lib {
-  
+
   struct A {
     int data;
-    explicit A(int x):data(x){}
-    A add(const A &other){ return A(other.data + data); }
+    explicit A(int x) : data(x) {}
+    A add(const A &other) { return A(other.data + data); }
   };
 
-  struct B: public A {
+  struct B : public A {
     std::string name;
     using A::A;
   };
@@ -25,42 +26,38 @@ namespace lib {
   glue::Element glue() {
     glue::Element element;
 
-    element["log"] = [](std::string message){ 
-      std::cout << "logged: " << message << std::endl;
-    };
+    element["log"] = [](std::string message) { std::cout << "logged: " << message << std::endl; };
 
     element["A"] = glue::ClassElement<lib::A>()
-      .addConstructor<int>()
-      .addMember("data", &lib::A::data)
-      .addMethod("add", &lib::A::add)
-      .addFunction("next", [](const lib::A &a){ return lib::A(a.data+1); })
-      .addFunction("__tostring", [](const lib::A &a){ return "lib::A(" + std::to_string(a.data) + ")"; })
-    ;
+                       .addConstructor<int>()
+                       .addMember("data", &lib::A::data)
+                       .addMethod("add", &lib::A::add)
+                       .addFunction("next", [](const lib::A &a) { return lib::A(a.data + 1); })
+                       .addFunction("__tostring", [](const lib::A &a) {
+                         return "lib::A(" + std::to_string(a.data) + ")";
+                       });
 
     element["B"] = glue::ClassElement<lib::B>()
-      .addConstructor<int>()
-      .addMember("name", &lib::B::name)
-      .setExtends(element["A"])
-    ;
+                       .addConstructor<int>()
+                       .addMember("name", &lib::B::name)
+                       .setExtends(element["A"]);
 
     return element;
   }
 
-}
+}  // namespace lib
 
 // allow implicit casting of B to base class A in lars::Any values
 LARS_ANY_DECLARE_BASES(lib::B, lib::A);
 
-int main(int argc, char ** argv) {
-
+int main(int argc, char **argv) {
   // parse command line options
 
   cxxopts::Options options("Glue Typescript Example");
-  options.add_options()
-    ("h,help", "Show help")
-    ("d,declarations", "Print typescript declarations")
-    ("w,watch", "Run in watch mode")
-    ("s,script", "path to the main directory containing an index.lua script", cxxopts::value<std::string>());
+  options.add_options()("h,help", "Show help")("d,declarations", "Print typescript declarations")(
+      "w,watch", "Run in watch mode")("s,script",
+                                      "path to the main directory containing an index.lua script",
+                                      cxxopts::value<std::string>());
 
   auto opts = options.parse(argc, argv);
 
@@ -73,9 +70,7 @@ int main(int argc, char ** argv) {
 
   glue::Element glue;
 
-  glue["log"] = [](std::string message){ 
-    std::cout << "logged: " << message << std::endl;
-  };
+  glue["log"] = [](std::string message) { std::cout << "logged: " << message << std::endl; };
 
   glue["lib"] = lib::glue();
 
@@ -88,16 +83,14 @@ int main(int argc, char ** argv) {
   if (opts["script"].count() > 0) {
     auto path = opts["script"].as<std::string>();
 
-    auto runMainScript = [&](const std::string &path){
+    auto runMainScript = [&](const std::string &path) {
       glue::LuaState lua;
       lua.openStandardLibs();
       lua["glue"] = glue;
       lua["package"]["path"] = path + "/?.lua;" + path + "/?/index.lua;";
 
-      auto mainMethod = lua.run("return require('.')")
-        .get<glue::Map &>()["main"]
-        .get<lars::AnyFunction>()
-      ;
+      auto mainMethod
+          = lua.run("return require('.')").get<glue::Map &>()["main"].get<lars::AnyFunction>();
 
       lars::AnyArguments args;
       auto result = mainMethod.call(args);
@@ -110,7 +103,6 @@ int main(int argc, char ** argv) {
     };
 
     if (opts["watch"].count() > 0) {
-
       struct ChangeListener : public FW::FileWatchListener {
         bool changed;
         void handleFileAction(FW::WatchID, const FW::String &, const FW::String &, FW::Action) {
@@ -121,13 +113,13 @@ int main(int argc, char ** argv) {
       fileWatcher.addWatch(path, &listener, true);
       std::cout << "watching " << path << std::endl;
 
-      while(true) {
+      while (true) {
         listener.changed = false;
         fileWatcher.update();
         if (listener.changed) {
           try {
             runMainScript(path);
-          } catch(const std::exception& e) {
+          } catch (const std::exception &e) {
             std::cerr << e.what() << '\n';
           }
         }
@@ -137,8 +129,7 @@ int main(int argc, char ** argv) {
     } else {
       return runMainScript(path);
     }
-
   }
-  
+
   return 0;
 }
