@@ -18,5 +18,8 @@ jobs:
         cmake -H. -Bbuild
         npm install
   
+    - name: Check cpp format
+      run: cmake --build build --target check-format
+
     - name: check ts style
       run: npm run check:style
