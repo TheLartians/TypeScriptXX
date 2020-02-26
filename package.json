@@ -2,15 +2,13 @@
   "devDependencies": {
     "lua-types": "2.5.2",
     "typescript-to-lua": "^0.31.0",
-    "prettier": "^1.19.1"
+    "prettier": "^1.19.1",
+    "concurrently": "^5.1.0"
   },
   "scripts": {
     "build": "tstl",
     "watch": "tstl -w",
     "check:style": "prettier --check \"typescript/**/*[!.d].ts\"",
     "fix:style": "prettier --check \"typescript/**/*.ts\" --write"
-  },
-  "dependencies": {
-    "concurrently": "^5.1.0"
   }
 }
