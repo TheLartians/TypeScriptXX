@@ -1,8 +1,8 @@
-[![Actions Status](https://github.com/TheLartians/TypeScriptPP/workflows/Build/badge.svg)](https://github.com/TheLartians/TypeScriptPP/actions)
-[![Actions Status](https://github.com/TheLartians/TypeScriptPP/workflows/Check%20style/badge.svg)](https://github.com/TheLartians/TypeScriptPP/actions)
+[![Actions Status](https://github.com/TheLartians/TypeScriptXX/workflows/Build/badge.svg)](https://github.com/TheLartians/TypeScriptXX/actions)
+[![Actions Status](https://github.com/TheLartians/TypeScriptXX/workflows/Check%20style/badge.svg)](https://github.com/TheLartians/TypeScriptXX/actions)
 
 
-# TypeScriptPP
+# TypeScriptXX
 
 Example project showing how to embed the [TypeScript](https://www.typescriptlang.org) scripting language in a C++ project with automatically generated declarations.
 
@@ -17,12 +17,12 @@ This project demonstrates how to use CMake to bring TypeScript, Lua and C++ toge
 ## Usage
 
 ```bash
-git clone https://github.com/TheLartians/TypeScriptPP.git
-cd TypeScriptPP
+git clone https://github.com/TheLartians/TypeScriptXX.git
+cd TypeScriptXX
 cmake -H. -Bbuild
 cmake --build build -j8 # compiles C++, updates declarations and transpiles TypeScript
-./build/TypeScriptPP -s lua # runs the transpiled lua script lua/index.lua
-npx concurrently "npm run watch" "./build/TypeScriptPP -s lua --watch" # runs the transpiler and program in watch mode
+./build/TypeScriptXX -s lua # runs the transpiled lua script lua/index.lua
+npx concurrently "npm run watch" "./build/TypeScriptXX -s lua --watch" # runs the transpiler and program in watch mode
 ```
 
 ## How it works
