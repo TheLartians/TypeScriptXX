@@ -17,4 +17,4 @@ jobs:
       run: cmake --build build
 
     - name: run
-      run: ./build/TypeScriptPP -s lua
+      run: ./build/TypeScriptXX -s lua
