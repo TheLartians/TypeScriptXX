@@ -23,9 +23,8 @@ CPMAddPackage(
 
 CPMAddPackage(
   NAME Glue
-  VERSION 1.0
-  # GIT_REPOSITORY https://github.com/TheLartians/Glue.git
-  SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/../Glue
+  VERSION 1.1
+  GITHUB_REPOSITORY TheLartians/Glue
 )
 
 # ---- Add source files ----

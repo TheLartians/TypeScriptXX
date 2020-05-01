@@ -1,12 +1,12 @@
 #include <glue/lua/state.h>
 #include <glue/view.h>
-#include <cxxopts.hpp>
 #include <greeter/glue.h>
+
+#include <cxxopts.hpp>
 
 #include "watch.h"
 
 int main(int argc, char **argv) {
-
   // parse command line options
   cxxopts::Options options("Glue Typescript Example");
 
@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
       // create Lua state
       glue::lua::State lua;
       lua.openStandardLibs();
-      
+
       // add Glue and set include path
       lua.addModule(glue);
       lua.root()["package"].asMap()["path"] = path + "/?.lua;" + path + "/?/index.lua;";

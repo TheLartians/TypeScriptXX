@@ -24,7 +24,7 @@ CPMAddPackage(
 CPMAddPackage(
   NAME FileWatcher
   GIT_TAG ee0b97efd206282ef8bb4b9c10c90c941de4a52b
-  GIT_REPOSITORY https://github.com/apetrone/simplefilewatcher.git
+  GITHUB_REPOSITORY apetrone/simplefilewatcher
 )
 
 if (FileWatcher_ADDED)
@@ -51,8 +51,7 @@ CPMAddPackage(
 CPMAddPackage(
   NAME LuaGlue
   VERSION 1.0
-  # GIT_REPOSITORY https://github.com/TheLartians/Glue.git
-  SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/../../LuaGlue
+  GITHUB_REPOSITORY TheLartians/LuaGlue
 )
 
 # ---- Create standalone executable ----

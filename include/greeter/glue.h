@@ -5,5 +5,5 @@
 namespace greeter {
 
   glue::MapValue glue();
-  
+
 }

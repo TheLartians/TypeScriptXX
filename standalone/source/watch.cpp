@@ -1,4 +1,5 @@
 #include "watch.h"
+
 #include <FileWatcher/FileWatcher.h>
 
 #include <chrono>
