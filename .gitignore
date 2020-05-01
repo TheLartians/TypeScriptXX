@@ -3,3 +3,4 @@
 /build*
 /typescript/cpplib.d.ts
 .DS_Store
+/.vscode

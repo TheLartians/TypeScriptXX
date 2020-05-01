@@ -1,9 +1,4 @@
 ---
-  Language: JavaScript
-  DisableFormat: true
-  SortIncludes: false
----
-  Language: Cpp
   BasedOnStyle: Google
   AccessModifierOffset: '-2'
   AlignTrailingComments: 'true'
@@ -18,4 +13,9 @@
   NamespaceIndentation: All
   BreakBeforeBinaryOperators: All
   BreakBeforeTernaryOperators: 'true'
+---
+  # we use prettier for formatting TS code
+  Language: JavaScript
+  DisableFormat: true
+  SortIncludes: false
 ...

@@ -3,7 +3,7 @@
     "pretty":  true,
     "removeComments":true, 
     "target":"es6", 
-    "types": ["lua-types/5.3"],
+    "types": [],
     "strict" : true,
     "outDir": "lua",
     "rootDir":"typescript",   

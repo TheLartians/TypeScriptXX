@@ -1,6 +1,6 @@
-# TheLartians/CPM - A simple Git dependency manager
-# =================================================
-# See https://github.com/TheLartians/CPM for usage and update instructions.
+# CPM.cmake - CMake's missing package manager
+# ===========================================
+# See https://github.com/TheLartians/CPM.cmake for usage and update instructions.
 #
 # MIT License
 # ----------- 
@@ -28,7 +28,7 @@
 
 cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 
-set(CURRENT_CPM_VERSION 0.16)
+set(CURRENT_CPM_VERSION 0.22)
 
 if(CPM_DIRECTORY)
   if(NOT ${CPM_DIRECTORY} MATCHES ${CMAKE_CURRENT_LIST_DIR})
@@ -41,14 +41,23 @@ See https://github.com/TheLartians/CPM.cmake for more information."
     endif()
     return()
   endif()
+
+  get_property(CPM_INITIALIZED GLOBAL "" PROPERTY CPM_INITIALIZED SET)   
+  if (CPM_INITIALIZED)
+    return()
+  endif()
 endif()
+
+set_property(GLOBAL PROPERTY CPM_INITIALIZED true) 
 
 option(CPM_USE_LOCAL_PACKAGES "Always try to use `find_package` to get dependencies" $ENV{CPM_USE_LOCAL_PACKAGES})
 option(CPM_LOCAL_PACKAGES_ONLY "Only use `find_package` to get dependencies" $ENV{CPM_LOCAL_PACKAGES_ONLY})
 option(CPM_DOWNLOAD_ALL "Always download dependencies from source" $ENV{CPM_DOWNLOAD_ALL})
+option(CPM_DONT_UPDATE_MODULE_PATH "Don't update the module path to allow using find_package" $ENV{CPM_DONT_UPDATE_MODULE_PATH})
 
 set(CPM_VERSION ${CURRENT_CPM_VERSION} CACHE INTERNAL "")
 set(CPM_DIRECTORY ${CMAKE_CURRENT_LIST_DIR} CACHE INTERNAL "")
+set(CPM_FILE ${CMAKE_CURRENT_LIST_FILE} CACHE INTERNAL "")
 set(CPM_PACKAGES "" CACHE INTERNAL "")
 set(CPM_DRY_RUN OFF CACHE INTERNAL "Don't download or configure dependencies (for testing)")
 
@@ -60,6 +69,15 @@ endif()
 
 set(CPM_SOURCE_CACHE ${CPM_SOURCE_CACHE_DEFAULT} CACHE PATH "Directory to downlaod CPM dependencies")
 
+if (NOT CPM_DONT_UPDATE_MODULE_PATH)
+  set(CPM_MODULE_PATH "${CMAKE_BINARY_DIR}/CPM_modules" CACHE INTERNAL "")
+  # remove old modules
+  FILE(REMOVE_RECURSE ${CPM_MODULE_PATH})
+  file(MAKE_DIRECTORY ${CPM_MODULE_PATH})
+  # locally added CPM modules should override global packages
+  set(CMAKE_MODULE_PATH "${CPM_MODULE_PATH};${CMAKE_MODULE_PATH}")
+endif()
+
 include(FetchContent)
 include(CMakeParseArguments)
 
@@ -70,13 +88,22 @@ endif()
 
 function(cpm_find_package NAME VERSION)
   string(REPLACE " " ";" EXTRA_ARGS "${ARGN}")
-  find_package(${NAME} ${VERSION} ${EXTRA_ARGS})
+  find_package(${NAME} ${VERSION} ${EXTRA_ARGS} QUIET)
   if(${CPM_ARGS_NAME}_FOUND)
     message(STATUS "${CPM_INDENT} using local package ${CPM_ARGS_NAME}@${${CPM_ARGS_NAME}_VERSION}")
     CPMRegisterPackage(${CPM_ARGS_NAME} "${${CPM_ARGS_NAME}_VERSION}")
     set(CPM_PACKAGE_FOUND YES PARENT_SCOPE)
   else()
     set(CPM_PACKAGE_FOUND NO PARENT_SCOPE)
+  endif()
+endfunction()
+
+# Create a custom FindXXX.cmake module for a CPM package
+# This prevents `find_package(NAME)` from finding the system library
+function(CPMCreateModuleFile Name)
+  if (NOT CPM_DONT_UPDATE_MODULE_PATH)
+    # erase any previous modules
+    FILE(WRITE ${CPM_MODULE_PATH}/Find${Name}.cmake "include(${CPM_FILE})\n${ARGN}\nset(${Name}_FOUND TRUE)")
   endif()
 endfunction()
 
@@ -124,7 +151,7 @@ function(CPMAddPackage)
     OPTIONS
   )
 
-  cmake_parse_arguments(CPM_ARGS "" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+  cmake_parse_arguments(CPM_ARGS "" "${oneValueArgs}" "${multiValueArgs}" "${ARGN}")
 
   if(CPM_USE_LOCAL_PACKAGES OR CPM_LOCAL_PACKAGES_ONLY)
     cpm_find_package(${CPM_ARGS_NAME} "${CPM_ARGS_VERSION}" ${CPM_ARGS_FIND_PACKAGE_ARGUMENTS})
@@ -167,7 +194,7 @@ function(CPMAddPackage)
     list(APPEND CPM_ARGS_UNPARSED_ARGUMENTS GIT_REPOSITORY "https://gitlab.com/${CPM_ARGS_GITLAB_REPOSITORY}.git")
   endif()
 
-  if (${CPM_ARGS_NAME} IN_LIST CPM_PACKAGES)
+  if ("${CPM_ARGS_NAME}" IN_LIST CPM_PACKAGES)
     CPMGetPackageVersion(${CPM_ARGS_NAME} CPM_PACKAGE_VERSION)
     if(${CPM_PACKAGE_VERSION} VERSION_LESS ${CPM_ARGS_VERSION})
       message(WARNING "${CPM_INDENT} requires a newer version of ${CPM_ARGS_NAME} (${CPM_ARGS_VERSION}) than currently included (${CPM_PACKAGE_VERSION}).")
@@ -208,28 +235,30 @@ function(CPMAddPackage)
 
   if (DEFINED CPM_ARGS_DOWNLOAD_COMMAND)
     set(FETCH_CONTENT_DECLARE_EXTRA_OPTS DOWNLOAD_COMMAND ${CPM_ARGS_DOWNLOAD_COMMAND})
-  else()
-    if (CPM_SOURCE_CACHE AND NOT DEFINED CPM_ARGS_SOURCE_DIR)
-      string(TOLOWER ${CPM_ARGS_NAME} lower_case_name)
-      set(origin_parameters ${CPM_ARGS_UNPARSED_ARGUMENTS})
-      list(SORT origin_parameters)
-      string(SHA1 origin_hash "${origin_parameters}")
-      set(download_directory ${CPM_SOURCE_CACHE}/${lower_case_name}/${origin_hash})
-      list(APPEND FETCH_CONTENT_DECLARE_EXTRA_OPTS SOURCE_DIR ${download_directory})
-      if (EXISTS ${download_directory})
-        list(APPEND FETCH_CONTENT_DECLARE_EXTRA_OPTS DOWNLOAD_COMMAND ":")
-        set(PACKAGE_INFO "${download_directory}")
-      else()
-        # remove timestamps so CMake will re-download the dependency
-        file(REMOVE_RECURSE ${CMAKE_BINARY_DIR}/_deps/${lower_case_name}-subbuild)
-        set(PACKAGE_INFO "${PACKAGE_INFO} -> ${download_directory}")
-      endif()
+  elseif(DEFINED CPM_ARGS_SOURCE_DIR)
+    set(FETCH_CONTENT_DECLARE_EXTRA_OPTS SOURCE_DIR ${CPM_ARGS_SOURCE_DIR})
+  elseif (CPM_SOURCE_CACHE)
+    string(TOLOWER ${CPM_ARGS_NAME} lower_case_name)
+    set(origin_parameters ${CPM_ARGS_UNPARSED_ARGUMENTS})
+    list(SORT origin_parameters)
+    string(SHA1 origin_hash "${origin_parameters}")
+    set(download_directory ${CPM_SOURCE_CACHE}/${lower_case_name}/${origin_hash})
+    list(APPEND FETCH_CONTENT_DECLARE_EXTRA_OPTS SOURCE_DIR ${download_directory})
+    if (EXISTS ${download_directory})
+      # disable the download command to allow offline builds
+      list(APPEND FETCH_CONTENT_DECLARE_EXTRA_OPTS DOWNLOAD_COMMAND "${CMAKE_COMMAND}")
+      set(PACKAGE_INFO "${download_directory}")
+    else()
+      # remove timestamps so CMake will re-download the dependency
+      file(REMOVE_RECURSE ${CMAKE_BINARY_DIR}/_deps/${lower_case_name}-subbuild)
+      set(PACKAGE_INFO "${PACKAGE_INFO} -> ${download_directory}")
     endif()
   endif()
 
   cpm_declare_fetch(${CPM_ARGS_NAME} ${CPM_ARGS_VERSION} ${PACKAGE_INFO} "${CPM_ARGS_UNPARSED_ARGUMENTS}" ${FETCH_CONTENT_DECLARE_EXTRA_OPTS})
   cpm_fetch_package(${CPM_ARGS_NAME} ${DOWNLOAD_ONLY})
   cpm_get_fetch_properties(${CPM_ARGS_NAME})
+  CPMCreateModuleFile(${CPM_ARGS_NAME} "CPMAddPackage(${ARGN})")
   SET(${CPM_ARGS_NAME}_ADDED YES)
   cpm_export_variables()
 endfunction()
@@ -291,7 +320,8 @@ function (cpm_fetch_package PACKAGE DOWNLOAD_ONLY)
   set(CPM_OLD_INDENT "${CPM_INDENT}")
   set(CPM_INDENT "${CPM_INDENT} ${PACKAGE}:")
   if(${DOWNLOAD_ONLY})
-    if(NOT "${PACKAGE}_POPULATED")
+    FetchContent_GetProperties(${PACKAGE})
+    if(NOT ${PACKAGE}_POPULATED)
       FetchContent_Populate(${PACKAGE})
     endif()
   else()

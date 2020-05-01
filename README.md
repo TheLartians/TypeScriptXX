@@ -17,9 +17,7 @@ This project demonstrates how to use CMake to bring TypeScript, Lua and C++ toge
 ## Usage
 
 ```bash
-git clone https://github.com/TheLartians/TypeScriptXX.git
-cd TypeScriptXX
-cmake -H. -Bbuild
+cmake -Hstandalone -Bbuild
 cmake --build build -j8 # compiles C++, updates declarations and transpiles TypeScript
 ./build/TypeScriptXX -s lua # runs the transpiled lua script lua/index.lua
 npx concurrently "npm run watch" "./build/TypeScriptXX -s lua --watch" # runs the transpiler and program in watch mode

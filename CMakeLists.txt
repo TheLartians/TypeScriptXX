@@ -1,76 +1,62 @@
 cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 
-project(TypeScriptPP)
+project(
+  Greeter
+  VERSION 1.0
+  LANGUAGES CXX  
+)
+
+# ---- Add Tools ----
+
+include(cmake/tools.cmake)
 
 # ---- Dependencies ----
 
 include(cmake/CPM.cmake)
 
+# helper to create an installable target
 CPMAddPackage(
-  NAME Glue
-  VERSION 0.9.6
-  GIT_REPOSITORY https://github.com/TheLartians/Glue.git
-  OPTIONS
-    "GLUE_ENABLE_LUA YES"
-    "GLUE_BUILD_LUA YES"
-)
-
-CPMAddPackage(
-  NAME cxxopts
-  GITHUB_REPOSITORY jarro2783/cxxopts
-  VERSION 2.2.0
-  OPTIONS
-    "CXXOPTS_BUILD_EXAMPLES NO"
-    "CXXOPTS_BUILD_TESTS NO"
+  NAME PackageProject.cmake
+  GITHUB_REPOSITORY TheLartians/PackageProject.cmake
+  VERSION 1.2
 )
 
 CPMAddPackage(
-  NAME FileWatcher
-  GIT_TAG ee0b97efd206282ef8bb4b9c10c90c941de4a52b
-  GIT_REPOSITORY https://github.com/apetrone/simplefilewatcher.git
+  NAME Glue
+  VERSION 1.1
+  GITHUB_REPOSITORY TheLartians/Glue
 )
 
-if (FileWatcher_ADDED)
-  file (GLOB FileWatcherSources ${FileWatcher_SOURCE_DIR}/source/*.cpp)
-  add_library(FileWatcher ${FileWatcherSources})
-  target_include_directories(FileWatcher PUBLIC ${FileWatcher_SOURCE_DIR}/include)
-  
-  install(
-    TARGETS FileWatcher
-    ARCHIVE DESTINATION lib
-  )
-endif()
+# ---- Add source files ----
 
-CPMAddPackage(
-  NAME Format.cmake
-  GITHUB_REPOSITORY TheLartians/Format.cmake
-  VERSION 1.0
+FILE(GLOB_RECURSE headers CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
+FILE(GLOB_RECURSE sources CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp")
+
+# ---- Create library ----
+
+add_library(Greeter ${headers} ${sources})
+
+set_target_properties(Greeter PROPERTIES CXX_STANDARD 17)
+
+# beeing a cross-platform target, we enforce enforce standards conformance on MSVC
+target_compile_options(Greeter PUBLIC "$<$<BOOL:${MSVC}>:/permissive->")
+
+target_link_libraries(Greeter PUBLIC Glue)
+
+target_include_directories(Greeter
+  PUBLIC
+    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include/${PROJECT_NAME}-${PROJECT_VERSION}>
 )
 
-# ---- Create executable ----
+# ---- Create an installable target ----
+# this allows users to install and find the library via `find_package()`.
 
-add_executable(TypeScriptPP source/main.cpp)
-set_target_properties(TypeScriptPP PROPERTIES CXX_STANDARD 17)
-target_link_libraries(TypeScriptPP Glue cxxopts FileWatcher)
-
-# ---- Create typescript declarations ----
-
-add_custom_command(
-  OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/typescript/cpplib.d.ts
-  DEPENDS TypeScriptPP
-  COMMAND TypeScriptPP -d > ${CMAKE_CURRENT_SOURCE_DIR}/typescript/cpplib.d.ts
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-  COMMENT "update typescript declarations"
+packageProject(
+  NAME ${PROJECT_NAME}
+  VERSION ${PROJECT_VERSION}
+  BINARY_DIR ${PROJECT_BINARY_DIR}
+  INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include
+  INCLUDE_DESTINATION include/${PROJECT_NAME}-${PROJECT_VERSION}
+  DEPENDENCIES Glue
 )
-
-# ---- Compile typescript code ----
-
-GlueBuildTypescript(
-  NAME TypeScriptPP
-  DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-  RESULT ${CMAKE_CURRENT_SOURCE_DIR}/lua
-  COMMAND build
-  DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/typescript/cpplib.d.ts
-)
-
-add_custom_target(BuildTypeScript ALL DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/lua)
