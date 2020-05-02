@@ -13,7 +13,6 @@ int main(int argc, char **argv) {
   // clang-format off
   options.add_options()
     ("h,help", "Show help")
-    ("d,declarations", "Print typescript declarations")
     ("w,watch", "Run in watch mode")
     ("s,script", "path to a lua script or a directory containing an `index.lua` script", cxxopts::value<std::string>());
   // clang-format on
