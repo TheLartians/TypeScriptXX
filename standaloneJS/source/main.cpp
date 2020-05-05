@@ -1,12 +1,12 @@
 #include <glue/emscripten/state.h>
 #include <glue/view.h>
 #include <greeter/glue.h>
+
 #include <cxxopts.hpp>
-
-#include <iostream>
 #include <exception>
+#include <iostream>
 
-int main(int argc, char ** argv) {
+int main(int argc, char** argv) {
   // parse command line options
   cxxopts::Options options("Glue Typescript Example");
 
@@ -37,10 +37,10 @@ int main(int argc, char ** argv) {
       auto path = opts["script"].as<std::string>();
       auto mainMethod = glue::View(state.run("require(process.cwd() + '/" + path + "')"))["main"];
       mainMethod();
-    } catch(const std::exception& e){
+    } catch (const std::exception& e) {
       std::cerr << e.what() << '\n';
     }
   }
-  
+
   return 0;
 }

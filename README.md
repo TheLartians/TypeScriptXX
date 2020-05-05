@@ -1,4 +1,5 @@
 [![Actions Status](https://github.com/TheLartians/TypeScriptXX/workflows/Lua/badge.svg)](https://github.com/TheLartians/TypeScriptXX/actions)
+[![Actions Status](https://github.com/TheLartians/TypeScriptXX/workflows/JavaScript/badge.svg)](https://github.com/TheLartians/TypeScriptXX/actions)
 [![Actions Status](https://github.com/TheLartians/TypeScriptXX/workflows/Test/badge.svg)](https://github.com/TheLartians/TypeScriptXX/actions)
 [![Actions Status](https://github.com/TheLartians/TypeScriptXX/workflows/Check%20style/badge.svg)](https://github.com/TheLartians/TypeScriptXX/actions)
 
