@@ -1,4 +1,4 @@
-[![Actions Status](https://github.com/TheLartians/TypeScriptXX/workflows/Build/badge.svg)](https://github.com/TheLartians/TypeScriptXX/actions)
+[![Actions Status](https://github.com/TheLartians/TypeScriptXX/workflows/Lua/badge.svg)](https://github.com/TheLartians/TypeScriptXX/actions)
 [![Actions Status](https://github.com/TheLartians/TypeScriptXX/workflows/Test/badge.svg)](https://github.com/TheLartians/TypeScriptXX/actions)
 [![Actions Status](https://github.com/TheLartians/TypeScriptXX/workflows/Check%20style/badge.svg)](https://github.com/TheLartians/TypeScriptXX/actions)
 
@@ -15,7 +15,7 @@ The TypeScript declarations are automatically generated and updated by CMake.
 The following commands build the project and run the [typescript script](typescript/index.ts).
 
 ```bash
-cmake -Hstandalone -Bbuild
+cmake -HstandaloneLua -Bbuild
 
  # Compiles C++ code, updates the declarations and transpiles TypeScript
 cmake --build build -j8
@@ -27,11 +27,11 @@ cmake --build build -j8
 Is is also possible to enable watch mode for hot reloading.
 
 ```bash
-npx concurrently "npm run watch" "./build/TypeScriptXX -s lua --watch"
+npx concurrently "npm run watch:lua" "./build/TypeScriptXX -s lua --watch"
 ```
 
 ## How it works
 
 The example C++ [library](include/greeter/greeter.h) is exposed to TypeScript using [Glue bindings](source/glue.cpp).
-The projects contains two standalone subprojects: [one](standalone) that uses [LuaGlue](https://github.com/TheLartians/LuaGlue) to bind and run lua code and [one](declarations) that simply prints the declarations.
+The projects contains two standalone subprojects: [one](standaloneLua) that uses [LuaGlue](https://github.com/TheLartians/LuaGlue) to bind and run lua code and [one](declarations) that simply prints the declarations.
 After building, CMake will use the latter to ensure that the declarations at `typescript/cpplib.d.ts` are up-to-date and then transpile the TypeScript code to Lua.

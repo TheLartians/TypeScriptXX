@@ -1,4 +1,5 @@
 /lua
+/js
 /node_modules
 /build*
 /typescript/cpplib.d.ts

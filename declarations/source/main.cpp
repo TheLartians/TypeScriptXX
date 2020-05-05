@@ -14,6 +14,7 @@ int main() {
   glue::DeclarationPrinter printer;
   printer.init();
   printer.print(std::cout, glue, &context);
+  std::cout << std::endl;
 
   return 0;
 }

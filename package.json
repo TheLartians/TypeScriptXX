@@ -5,8 +5,9 @@
     "concurrently": "^5.1.0"
   },
   "scripts": {
-    "build": "tstl",
-    "watch": "tstl -w",
+    "build:lua": "tstl -p standaloneLua",
+    "watch:lua": "tstl -w -p standaloneLua",
+    "build:js": "tsc -p standaloneJS",
     "check:style": "prettier --check \"typescript/**/*[!.d].ts\"",
     "fix:style": "prettier --check \"typescript/**/*.ts\" --write"
   }

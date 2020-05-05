@@ -1,0 +1,10 @@
+{
+  "extends": "..",
+  "compilerOptions": {
+    "outDir": "../lua",
+  },
+  "tstl": {
+    "luaTarget": "5.3",
+    "luaLibImport": "require"
+  }
+}
