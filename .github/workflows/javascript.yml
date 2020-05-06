@@ -25,4 +25,4 @@ jobs:
         run: cmake --build build -j4
 
       - name: test
-        run: node build/TypeScriptXX.js --script js
+        run: node build/TypeScriptXX.js --script dist/js
