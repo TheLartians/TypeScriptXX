@@ -1,7 +1,7 @@
 export function main() {
   const myGreeter = new greeter.Greeter("TypeScript");
   console.log(myGreeter.greet(greeter.LanguageCode.EN));
-  // manual delete required for JS as there are no destructors
+  // we need to manually delete C++ classes as there are no destructors in JavaScript
   deleteValue(myGreeter);
   return 0;
 }
