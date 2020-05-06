@@ -8,9 +8,20 @@ project(TypeScriptXX
 
 include(../cmake/tools.cmake)
 
+# --- Set CMake flags
+
+# disable closure as it currently breaks the script
+set(CMAKE_CXX_FLAGS_RELEASE "-Oz -g0 --llvm-lto 3 --closure 0")
+set(CMAKE_CXX_FLAGS "-s DISABLE_EXCEPTION_CATCHING=0")
+
 # ---- Dependencies ----
 
 include(../cmake/CPM.cmake)
+
+CPMAddPackage(
+  NAME Greeter
+  SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/..
+)
 
 CPMAddPackage(
   NAME cxxopts
@@ -22,36 +33,14 @@ CPMAddPackage(
 )
 
 CPMAddPackage(
-  NAME FileWatcher
-  GIT_TAG ee0b97efd206282ef8bb4b9c10c90c941de4a52b
-  GITHUB_REPOSITORY apetrone/simplefilewatcher
-)
-
-if (FileWatcher_ADDED)
-  file (GLOB FileWatcherSources ${FileWatcher_SOURCE_DIR}/source/*.cpp)
-  add_library(FileWatcher ${FileWatcherSources})
-  target_include_directories(FileWatcher PUBLIC ${FileWatcher_SOURCE_DIR}/include)
-  
-  install(
-    TARGETS FileWatcher
-    ARCHIVE DESTINATION lib
-  )
-endif()
-
-CPMAddPackage(
-  NAME Greeter
-  SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/..
+  NAME EmGlue
+  VERSION 0.2
+  GITHUB_REPOSITORY TheLartians/EmGlue
 )
 
 CPMAddPackage(
   NAME TypeScriptXXDeclarations
   SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/../declarations
-)
-
-CPMAddPackage(
-  NAME LuaGlue
-  VERSION 1.0.1
-  GITHUB_REPOSITORY TheLartians/LuaGlue
 )
 
 # ---- Create standalone executable ----
@@ -65,28 +54,28 @@ set_target_properties(TypeScriptXX PROPERTIES
   OUTPUT_NAME "TypeScriptXX"
 )
 
-target_link_libraries(TypeScriptXX Greeter LuaGlue cxxopts FileWatcher)
+target_link_libraries(TypeScriptXX Greeter EmGlue cxxopts)
 
 # ---- Create typescript declarations ----
 
 add_custom_command(
   OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/../typescript/cpplib.d.ts
   DEPENDS TypeScriptXXDeclarations
-  COMMAND TypeScriptXXDeclarations > ${CMAKE_CURRENT_SOURCE_DIR}/../typescript/cpplib.d.ts
+  COMMAND node ${TypeScriptXXDeclarations_BINARY_DIR}/TypeScriptXXDeclarations.js > ${CMAKE_CURRENT_SOURCE_DIR}/../typescript/cpplib.d.ts
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/..
   COMMENT "update typescript declarations"
 )
 
 # ---- Compile typescript code ----
 
-include(${LuaGlue_SOURCE_DIR}/cmake/TranspileTypeScript.cmake)
+include(../cmake/TranspileTypeScript.cmake)
 
 TranspileTypeScript(
   NAME TypeScriptXX
   DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/..
-  RESULT ${CMAKE_CURRENT_SOURCE_DIR}/../lua
-  COMMAND build
+  RESULT ${CMAKE_CURRENT_SOURCE_DIR}/../dist/js
+  COMMAND build:js
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../typescript/cpplib.d.ts
 )
 
-add_custom_target(BuildTypeScript ALL DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../lua)
+add_custom_target(BuildTypeScript ALL DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../dist/js)

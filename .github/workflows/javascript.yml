@@ -1,0 +1,28 @@
+name: JavaScript
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: mymindstorm/setup-emsdk@v4
+
+      - uses: actions/checkout@v1
+
+      - name: configure
+        run: emcmake cmake -HstandaloneJS -Bbuild
+      
+      - name: build
+        run: cmake --build build -j4
+
+      - name: test
+        run: node build/TypeScriptXX.js --script dist/js

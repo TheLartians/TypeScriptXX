@@ -1,0 +1,6 @@
+{
+  "extends": "..",
+  "compilerOptions": {
+    "outDir": "../dist/js",
+  },
+}
