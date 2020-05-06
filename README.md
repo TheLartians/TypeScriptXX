@@ -2,6 +2,7 @@
 [![Actions Status](https://github.com/TheLartians/TypeScriptXX/workflows/JavaScript/badge.svg)](https://github.com/TheLartians/TypeScriptXX/actions)
 [![Actions Status](https://github.com/TheLartians/TypeScriptXX/workflows/Test/badge.svg)](https://github.com/TheLartians/TypeScriptXX/actions)
 [![Actions Status](https://github.com/TheLartians/TypeScriptXX/workflows/Check%20style/badge.svg)](https://github.com/TheLartians/TypeScriptXX/actions)
+[![codecov](https://codecov.io/gh/TheLartians/TypeScriptXX/branch/master/graph/badge.svg)](https://codecov.io/gh/TheLartians/TypeScriptXX)
 
 # TypeScriptXX
 
