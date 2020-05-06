@@ -23,7 +23,7 @@ CPMAddPackage(
 
 CPMAddPackage(
   NAME Glue
-  VERSION 1.3.1
+  VERSION 1.3.2
   GITHUB_REPOSITORY TheLartians/Glue
 )
 
