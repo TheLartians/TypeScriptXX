@@ -56,9 +56,9 @@ The example C++ [library](include/greeter/greeter.h) is exposed to TypeScript us
 
 The projects contains four standalone subprojects:
 
-- [test](test) check the library code and run tests
-- [declarations](declarations) that simply prints the declarations
-- [standaloneLua](standaloneLua) that uses [LuaGlue](https://github.com/TheLartians/LuaGlue) to bind and run lua code.
-- [standaloneJS](standaloneLua) that uses [EmGlue](https://github.com/TheLartians/EmGlue) to bind to a JavaScript runtime such as node.js.
+- [test](test), that check the library code
+- [declarations](declarations), that simply prints the declarations
+- [standaloneLua](standaloneLua), that uses [LuaGlue](https://github.com/TheLartians/LuaGlue) to bind and run lua code.
+- [standaloneJS](standaloneLua), that uses [EmGlue](https://github.com/TheLartians/EmGlue) to bind to a JavaScript runtime such as node.js.
 
 After building, CMake will use the latter to ensure that the declarations at `typescript/cpplib.d.ts` are up-to-date and then transpile the TypeScript code to Lua or JavaScript.
