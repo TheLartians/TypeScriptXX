@@ -36,6 +36,7 @@ int main(int argc, char **argv) {
       // create Lua state
       glue::lua::State lua;
       lua.openStandardLibs();
+      glue["deleteValue"] = lua.getValueDeleter();
 
       // add Glue and set include path
       lua.addModule(glue);

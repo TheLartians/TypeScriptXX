@@ -50,7 +50,7 @@ CPMAddPackage(
 
 CPMAddPackage(
   NAME LuaGlue
-  VERSION 1.0.1
+  VERSION 1.1
   GITHUB_REPOSITORY TheLartians/LuaGlue
 )
 
@@ -84,9 +84,9 @@ include(../cmake/TranspileTypeScript.cmake)
 TranspileTypeScript(
   NAME TypeScriptXX
   DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/..
-  RESULT ${CMAKE_CURRENT_SOURCE_DIR}/../lua
+  RESULT ${CMAKE_CURRENT_SOURCE_DIR}/../dist/lua
   COMMAND build:lua
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../typescript/cpplib.d.ts
 )
 
-add_custom_target(BuildTypeScript ALL DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../lua)
+add_custom_target(BuildTypeScript ALL DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../dist/lua)

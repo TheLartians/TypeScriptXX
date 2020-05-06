@@ -34,9 +34,8 @@ CPMAddPackage(
 
 CPMAddPackage(
   NAME EmGlue
-  VERSION 0.1
+  VERSION 0.2
   GITHUB_REPOSITORY TheLartians/EmGlue
-  GIT_TAG 3b26b58ffe1dd2a85aa5d001efb0de83e52f2d8a
 )
 
 CPMAddPackage(
@@ -74,9 +73,9 @@ include(../cmake/TranspileTypeScript.cmake)
 TranspileTypeScript(
   NAME TypeScriptXX
   DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/..
-  RESULT ${CMAKE_CURRENT_SOURCE_DIR}/../js
+  RESULT ${CMAKE_CURRENT_SOURCE_DIR}/../dist/js
   COMMAND build:js
   DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../typescript/cpplib.d.ts
 )
 
-add_custom_target(BuildTypeScript ALL DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../js)
+add_custom_target(BuildTypeScript ALL DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../dist/js)

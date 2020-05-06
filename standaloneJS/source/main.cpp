@@ -23,12 +23,14 @@ int main(int argc, char** argv) {
     return 0;
   }
 
+  glue::emscripten::State state;
+
   // create glue
   auto glue = glue::createAnyMap();
   glue["greeter"] = greeter::glue();
+  glue["deleteValue"] = state.getValueDeleter();
 
   // add glue to state
-  glue::emscripten::State state;
   state.addModule(glue, state.root());
 
   // load js script

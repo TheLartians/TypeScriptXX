@@ -1,7 +1,7 @@
 {
   "extends": "..",
   "compilerOptions": {
-    "outDir": "../lua",
+    "outDir": "../dist/lua",
   },
   "tstl": {
     "luaTarget": "5.3",
