@@ -50,7 +50,7 @@ CPMAddPackage(
 
 CPMAddPackage(
   NAME LuaGlue
-  VERSION 1.1
+  VERSION 1.1.1
   GITHUB_REPOSITORY TheLartians/LuaGlue
 )
 
